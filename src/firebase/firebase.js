@@ -36,4 +36,17 @@ class Firebase {
 }
 
 const firebase = new Firebase();
+
+// после get можно прочитать данные
+// get().then(ReadData)
+function  ReadData (querySnapshot) {
+    querySnapshot.forEach(
+        (doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        })
+};
+
+
+export {ReadData};
 export default firebase;
