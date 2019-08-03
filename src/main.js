@@ -3,5 +3,6 @@ import regeneratorRuntime from "regenerator-runtime";
 
 console.log('main1');
 
-import {firebase} from '~f/firebase';
+import '~f/AddData';
+console.log('Данные импортированы');
 

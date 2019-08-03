@@ -68,9 +68,6 @@ let conf = {
     resolve: {
         alias: {
             '~': path.resolve(__dirname, 'src'),
-            '~c': path.resolve(__dirname, 'src/components'),
-            '~p': path.resolve(__dirname, 'src/pages'),
-            '~s': path.resolve(__dirname, 'src/store'),
             '~f': path.resolve(__dirname, 'src/firebase')
         }
     },
