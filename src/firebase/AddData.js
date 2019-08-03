@@ -1,10 +1,20 @@
 import firebase from "./firebase";
 
+let ResatarauntIDS = [];
 
 function addRestaurant (data) {
     let collection = firebase.db.collection('restaurants');
-    return collection.add(data);
 
+    collection.add(data)
+        .then(function(docRef) {
+            console.log("Document written with ID: ", docRef.id);
+            ResatarauntIDS.push(docRef.id);
+            return docRef.id;
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+            return null;
+        });
 };
 
 function getRandomItem (arr) {
@@ -16,6 +26,7 @@ function getRandomItem (arr) {
  */
 function addMockRestaurants () {
     let promises = [];
+    alert('Начать импорт ?');
 
     for (let i = 0; i < 20; i++) {
         let name =
@@ -30,7 +41,7 @@ function addMockRestaurants () {
         let numRatings = 0;
         let avgRating = 0;
 
-        let promise = addRestaurant({
+        let DocID = addRestaurant({
             name: name,
             category: category,
             price: price,
@@ -40,23 +51,36 @@ function addMockRestaurants () {
             photo: photo
         });
 
-        if (!promise) {
-            alert('addRestaurant() is not implemented yet!');
-            return Promise.reject();
-        } else {
-            promises.push(promise);
-        }
     }
 
-    return Promise.all(promises);
+
+    setTimeout( handlerRating,1000);
+
+
+
 };
 
+function handlerRating() {
+
+        if ( ResatarauntIDS.length === 20) {
+            for (let i = 0; i < 20; i++) {
+                addMockRatings(ResatarauntIDS[i]);
+            };
+            return;
+        } else {
+            console.log(' timeout : ',ResatarauntIDS.length);
+            setTimeout( handlerRating,1000);
+        }
+
+}
+
+
 function addRating (restaurantID, rating) {
-    let collection = firebase.firestore().collection('restaurants');
+    let collection = firebase.db.collection('restaurants');
     let document = collection.doc(restaurantID);
     let newRatingDocument = document.collection('ratings').doc();
 
-    return firebase.firestore().runTransaction(function(transaction) {
+    return firebase.db.runTransaction(function(transaction) {
         return transaction.get(document).then(function(doc) {
             let data = doc.data();
 
@@ -77,6 +101,7 @@ function addRating (restaurantID, rating) {
  * Adds a set of mock Ratings to the given Restaurant.
  */
 function addMockRatings (restaurantID) {
+    console.log('addMockRatings : ',restaurantID);
     let ratingPromises = [];
     for (let r = 0; r < 5*Math.random(); r++) {
         let rating = data.ratings[
@@ -84,7 +109,7 @@ function addMockRatings (restaurantID) {
             ];
         rating.userName = 'Bot (Web)';
         rating.timestamp = new Date();
-        rating.userId = firebase.auth().currentUser.uid;
+        rating.userId = 'testUser0';
         ratingPromises.push(addRating(restaurantID, rating));
     }
     return Promise.all(ratingPromises);
