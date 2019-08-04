@@ -3,14 +3,23 @@ import {ReadData} from "./firebase";
 
 export default function() {
 
+    let query
 
-    let query = firebase.db.collection('restaurants');
+    // query = firebase.db.collection('restaurants');
+    //
+    // query = query.where('category', '==', 'Mexican');
+    // query = query.orderBy('avgRating', 'desc');
+    // query.get().then(ReadData);
 
-    query = query.where('category', '==', 'Mexican');
-    // query = query.where('price', '==', 2);
-    query = query.orderBy('avgRating', 'desc');
+    query = firebase.db.collection('restaurants')
+        .doc('CyRUMR528bQkmXV0s4If')
+        .get()
+        .then((doc) => {
+            console.log(doc.id);
+            console.log(doc.data());
+        });
 
-    query.get().then(ReadData);
+
 }
 
 // The array_contains index allows you to query the regions array field:

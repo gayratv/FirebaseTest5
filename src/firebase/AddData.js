@@ -104,12 +104,17 @@ function addMockRatings (restaurantID) {
     console.log('addMockRatings : ',restaurantID);
     let ratingPromises = [];
     for (let r = 0; r < 5*Math.random(); r++) {
-        let rating = data.ratings[
-            parseInt(data.ratings.length*Math.random())
-            ];
-        rating.userName = 'Bot (Web)';
+
+        let iInd = parseInt(data.ratings.length*Math.random());
+        let rating = {};
+        rating = {...data.ratings[iInd ]};
+        rating.text += ' ' +Math.floor(Math.random()*10000);;
+        // console.log(rating);
+
+        let user0 = getRandomItem(data.users);
+        rating.userName = user0.userName;
         rating.timestamp = new Date();
-        rating.userId = 'testUser0';
+        rating.userId = user0.userId;
         ratingPromises.push(addRating(restaurantID, rating));
     }
     return Promise.all(ratingPromises);
@@ -212,6 +217,42 @@ var data = {
             rating: 5,
             text: 'This is my favorite place. Literally.'
         }
+    ],
+
+    users : [
+        {
+            userId : 'Bob',
+            userName : 'Bob Marly'
+        },
+        {
+            userId : 'Peter',
+            userName : 'Peter Scott'
+        },
+        {
+            userId : 'John',
+            userName : 'John Mayer'
+        },
+        {
+            userId : 'Иван',
+            userName : 'Иван Голунов'
+        },
+        {
+            userId : 'Вася',
+            userName : 'Вася Петечкин'
+        },
+        {
+            userId : 'Петр',
+            userName : 'Петр Великий'
+        },
+        {
+            userId : 'Саша',
+            userName : 'Саша Грин'
+        },
+        {
+            userId : 'Алексей',
+            userName : 'Алексей Никулин'
+        },
+
     ]
 };
 
